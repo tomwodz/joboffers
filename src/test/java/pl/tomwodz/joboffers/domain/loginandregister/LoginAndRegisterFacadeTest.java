@@ -57,6 +57,7 @@ class LoginAndRegisterFacadeTest {
     void ShouldBeAbleToFindUserByUsername() {
 
         //given
+        loginAndRegisterFacade.register(userRegisterRequestDto);
 
         //when
         UserDto userDto = loginAndRegisterFacade.findByUsername(userRegisterRequestDto.username());
