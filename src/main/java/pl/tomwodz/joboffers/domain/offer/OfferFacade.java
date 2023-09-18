@@ -1,7 +1,7 @@
 package pl.tomwodz.joboffers.domain.offer;
 
 import lombok.AllArgsConstructor;
-import pl.tomwodz.joboffers.domain.clientoffer.ClientOfferFacade;
+import pl.tomwodz.joboffers.domain.clientoffer.ClientOfferQuery;
 import pl.tomwodz.joboffers.domain.clientoffer.dto.JobOfferResponse;
 import pl.tomwodz.joboffers.domain.offer.dto.OfferRequestDto;
 import pl.tomwodz.joboffers.domain.offer.dto.OfferResponseDto;
@@ -15,7 +15,7 @@ public class OfferFacade {
 
     private final OfferRepository offerRepository;
     private final OfferFactory offerFactory;
-    private final ClientOfferFacade clientOfferFacade;
+    private final ClientOfferQuery clientOfferQuery;
     public OfferResponseDto findOfferById(Long id) {
         return this.offerRepository.findById(id)
                 .map(OfferMapper::mapFromOfferToOfferResponseDto)
@@ -39,7 +39,7 @@ public class OfferFacade {
     }
 
     public List<OfferResponseDto> fetchAllOffersAndSaveAllIfNotExists() {
-        List<JobOfferResponse> jobOffersResponse = this.clientOfferFacade.fetchOffers();
+        List<JobOfferResponse> jobOffersResponse = this.clientOfferQuery.fetchOffers();
         List<Offer> offers = this.offerFactory.mapFromJobOfferResponseToOffers(jobOffersResponse);
         return offers.stream()
                 .filter(offer -> !offer.getOfferUrl().isEmpty())

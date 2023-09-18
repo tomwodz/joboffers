@@ -1,7 +1,7 @@
 package pl.tomwodz.joboffers.domain.offer;
 
 import org.junit.jupiter.api.Test;
-import pl.tomwodz.joboffers.domain.clientoffer.ClientOfferFacade;
+import pl.tomwodz.joboffers.domain.clientoffer.ClientOfferQuery;
 import pl.tomwodz.joboffers.domain.clientoffer.dto.JobOfferResponse;
 import pl.tomwodz.joboffers.domain.offer.dto.OfferRequestDto;
 import pl.tomwodz.joboffers.domain.offer.dto.OfferResponseDto;
@@ -17,9 +17,9 @@ class OfferFacadeTest {
 
     OfferRepository offerRepository = new OfferRepositoryTestImpl();
 
-    ClientOfferFacade clientOfferFacade = mock(ClientOfferFacade.class);
+    ClientOfferQuery clientOfferQuery = mock(ClientOfferQuery.class);
 
-    OfferFacade offerFacade = new OfferConfiguration().offerFacade(offerRepository, clientOfferFacade);
+    OfferFacade offerFacade = new OfferConfiguration().offerFacade(offerRepository, clientOfferQuery);
 
     OfferRequestDto offerRequestDto = OfferRequestDto.builder()
             .companyName("Company")
@@ -115,7 +115,7 @@ class OfferFacadeTest {
         this.offerFacade.saveOffer(new OfferRequestDto("Company", "Programmer","4","https4"));
         this.offerFacade.saveOffer(new OfferRequestDto("Company", "Programmer","5","https5"));
 
-        when(clientOfferFacade.fetchOffers()).thenReturn(List.of
+        when(clientOfferQuery.fetchOffers()).thenReturn(List.of
                 (new JobOfferResponse("Company", "Programmer", "2", "https7"),
                         new JobOfferResponse("Company", "Programmer", "2", "https2")
                         ));
