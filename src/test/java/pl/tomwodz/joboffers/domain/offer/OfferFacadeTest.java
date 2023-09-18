@@ -1,13 +1,11 @@
 package pl.tomwodz.joboffers.domain.offer;
 
 import org.junit.jupiter.api.Test;
-import org.mockito.stubbing.OngoingStubbing;
 import pl.tomwodz.joboffers.domain.clientoffer.ClientOfferFacade;
 import pl.tomwodz.joboffers.domain.clientoffer.dto.JobOfferResponse;
 import pl.tomwodz.joboffers.domain.offer.dto.OfferRequestDto;
 import pl.tomwodz.joboffers.domain.offer.dto.OfferResponseDto;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -115,10 +113,12 @@ class OfferFacadeTest {
         this.offerFacade.saveOffer(new OfferRequestDto("Company", "Programmer","2","https2"));
         this.offerFacade.saveOffer(new OfferRequestDto("Company", "Programmer","3","https3"));
         this.offerFacade.saveOffer(new OfferRequestDto("Company", "Programmer","4","https4"));
-        this.offerFacade.saveOffer(new OfferRequestDto("Company", "Programmer","6","https5"));
+        this.offerFacade.saveOffer(new OfferRequestDto("Company", "Programmer","5","https5"));
 
         when(clientOfferFacade.fetchOffers()).thenReturn(List.of
-                (new JobOfferResponse("Company", "Programmer", "2", "https6")));
+                (new JobOfferResponse("Company", "Programmer", "2", "https7"),
+                        new JobOfferResponse("Company", "Programmer", "2", "https2")
+                        ));
 
 
         //when
