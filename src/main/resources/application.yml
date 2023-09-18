@@ -2,3 +2,12 @@ spring:
   data:
     mongodb:
       uri: mongodb://tomwodz:tomwodz@localhost:27017/mongo_joboffers
+
+
+job-offers:
+  client-offer:
+    http:
+      client:
+        config:
+          uri: http://ec2-3-120-147-150.eu-central-1.compute.amazonaws.com
+          port: 5057
