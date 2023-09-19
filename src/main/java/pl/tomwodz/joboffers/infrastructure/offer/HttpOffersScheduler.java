@@ -20,7 +20,7 @@ public class HttpOffersScheduler {
     public List<OfferResponseDto> fetchAllOffersAndSaveAllIfNotExists(){
         log.info("Client offer scheduler started.");
         List<OfferResponseDto> addedOffers = offerFacade.fetchAllOffersAndSaveAllIfNotExists();
-        log.info(addedOffers);
+        log.info("Added offers: " + addedOffers.size());
         return addedOffers;
     }
 }

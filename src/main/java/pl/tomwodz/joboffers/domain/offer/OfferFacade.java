@@ -16,7 +16,7 @@ public class OfferFacade {
     private final OfferRepository offerRepository;
     private final OfferFactory offerFactory;
     private final ClientOfferQuery clientOfferQuery;
-    public OfferResponseDto findOfferById(Long id) {
+    public OfferResponseDto findOfferById(String id) {
         return this.offerRepository.findById(id)
                 .map(OfferMapper::mapFromOfferToOfferResponseDto)
                 .orElseThrow(() -> new OfferNotFoundException(OFFER_NOT_FOUND.info + id));
@@ -45,9 +45,9 @@ public class OfferFacade {
                 .filter(offer -> !offer.getOfferUrl().isEmpty())
                 .filter(offer -> !this.offerRepository.existsByOfferUrl(offer.getOfferUrl()))
                 .toList()
-                //.stream()
-               // .map(offerToSave -> this.offerRepository.save(offerToSave))
-                //.toList()
+                .stream()
+                .map(offerToSave -> this.offerRepository.save(offerToSave))
+                .toList()
                 .stream()
                 .map(offerSaved -> OfferMapper.mapFromOfferToOfferResponseDto(offerSaved))
                 .toList();

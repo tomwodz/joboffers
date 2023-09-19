@@ -18,7 +18,7 @@ import java.util.List;
 
 @Log4j2
 @AllArgsConstructor
-public class ClientOfferRestTemplate implements ClientOfferQuery {
+class ClientOfferRestTemplate implements ClientOfferQuery {
 
     private final RestTemplate restTemplate;
     private final String uri;

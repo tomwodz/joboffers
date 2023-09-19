@@ -69,7 +69,7 @@ class OfferFacadeTest {
         //given
         //when
         //then
-        assertThrows(OfferNotFoundException.class, () -> this.offerFacade.findOfferById(1000L));
+        assertThrows(OfferNotFoundException.class, () -> this.offerFacade.findOfferById(""));
 
     }
 

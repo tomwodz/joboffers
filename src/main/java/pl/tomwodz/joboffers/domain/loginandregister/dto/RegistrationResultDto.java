@@ -4,7 +4,7 @@ import lombok.Builder;
 
 @Builder
 public record RegistrationResultDto (
-        Long id,
+        String id,
         String username,
         boolean registered
 ) {
