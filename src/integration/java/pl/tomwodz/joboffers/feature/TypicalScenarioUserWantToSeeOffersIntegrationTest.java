@@ -7,6 +7,8 @@ import org.springframework.http.HttpStatus;
 import pl.tomwodz.joboffers.BaseIntegrationTest;
 import pl.tomwodz.joboffers.domain.clientoffer.ClientOfferQuery;
 import pl.tomwodz.joboffers.domain.clientoffer.dto.JobOfferResponse;
+import pl.tomwodz.joboffers.domain.offer.dto.OfferResponseDto;
+import pl.tomwodz.joboffers.infrastructure.offer.HttpOffersScheduler;
 
 import java.util.List;
 
@@ -18,6 +20,9 @@ public class TypicalScenarioUserWantToSeeOffersIntegrationTest
 
   @Autowired
     ClientOfferQuery clientOfferQuery;
+
+  @Autowired
+  HttpOffersScheduler httpOffersScheduler;
 
   @Test
   public void ShouldBeReturnEmptyResponseWhenNotConnectedToExternalOrNotNewOffers() {
@@ -35,13 +40,29 @@ public class TypicalScenarioUserWantToSeeOffersIntegrationTest
 
     //then
     assertThat(expected.size()).isEqualTo(0);
+  }
 
+  @Test
+  public void ShouldBeReturnThreeResponseWhenConnectedToExternal() {
+    //step 2: scheduler ran 1st time and made GET to external server and system added 0 offers to database
+    //given
+    wireMockServer.stubFor(WireMock.get("/offers")
+            .willReturn(WireMock.aResponse()
+                    .withStatus(HttpStatus.OK.value())
+                    .withHeader("Content-Type", "application/json")
+                    .withBody(bodyWithThreeOffersJson())));
+
+    //when
+    List<OfferResponseDto> expectedList = httpOffersScheduler.fetchAllOffersAndSaveAllIfNotExists();
+
+    //then
+    assertThat(expectedList.size()).isEqualTo(3);
   }
 
 
 
 
-  //step 2: scheduler ran 1st time and made GET to external server and system added 0 offers to database
+
   //step 3: user tried to get JWT token by requesting POST /token with username=someUser, password=somePassword and system returned UNAUTHORIZED(401)
   //step 4: user made GET /offers with no jwt token and system returned UNAUTHORIZED(401)
   //step 5: user made POST /register with username=someUser, password=somePassword and system registered user with status OK(200)

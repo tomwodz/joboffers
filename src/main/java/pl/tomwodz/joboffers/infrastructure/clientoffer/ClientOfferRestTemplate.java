@@ -27,17 +27,18 @@ public class ClientOfferRestTemplate implements ClientOfferQuery {
     @Override
     public List<JobOfferResponse> fetchOffers() {
         log.info("Started connecting to outside client");
-        String urlForService = getUrlForService("/offers");
         HttpHeaders headers = new HttpHeaders();
         final HttpEntity<HttpHeaders> requestEntity = new HttpEntity<>(headers);
-        final String url = UriComponentsBuilder.fromHttpUrl(urlForService).toUriString();
         try {
+            String urlForService = getUrlForService("/offers");
+            final String url = UriComponentsBuilder.fromHttpUrl(urlForService).toUriString();
             ResponseEntity<List<JobOfferResponse>> response = restTemplate.exchange(
                     url,
                     HttpMethod.GET,
                     requestEntity,
                     new ParameterizedTypeReference<>() {
                     });
+            response.getBody();
             return verificationBodyResponse(response.getBody());
         }
         catch (ResourceAccessException e) {
