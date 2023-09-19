@@ -10,7 +10,7 @@ import pl.tomwodz.joboffers.domain.clientoffer.ClientOfferQuery;
 import java.time.Duration;
 
 @Configuration
-public class ClientOfferConfig {
+public class ClientOfferConfigurtion {
 
     @Bean
     public RestTemplateResponseErrorHandler restTemplateResponseErrorHandler() {
@@ -18,20 +18,18 @@ public class ClientOfferConfig {
     }
 
     @Bean
-    public RestTemplate restTemplate(RestTemplateResponseErrorHandler restTemplateResponseErrorHandler) {
+    public RestTemplate restTemplate(RestTemplateResponseErrorHandler restTemplateResponseErrorHandler, ClientOfferRestTemplateConfigurationProperties properties) {
         return new RestTemplateBuilder()
                 .errorHandler(restTemplateResponseErrorHandler)
-                .setConnectTimeout(Duration.ofMillis(1000))
-                .setReadTimeout(Duration.ofMillis(1000))
+                .setConnectTimeout(Duration.ofMillis(properties.connectionTimeout()))
+                .setReadTimeout(Duration.ofMillis(properties.readTimeout()))
                 .build();
     }
 
     @Bean
-    public ClientOfferQuery remoteClientOfferQueryRestTemplate(RestTemplate restTemplate,
-                                                               @Value("${job-offers.client-offer.http.client.config.uri}") String uri,
-                                                               @Value("${job-offers.client-offer.http.client.config.port}") int port
+    public ClientOfferQuery remoteClientOfferQueryRestTemplate(RestTemplate restTemplate, ClientOfferRestTemplateConfigurationProperties properties
     ) {
-        return new ClientOfferRestTemplate(restTemplate, uri, port);
+        return new ClientOfferRestTemplate(restTemplate, properties.uri(), properties.port());
     }
 
 }
