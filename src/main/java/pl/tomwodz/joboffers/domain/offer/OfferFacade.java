@@ -45,9 +45,9 @@ public class OfferFacade {
                 .filter(offer -> !offer.getOfferUrl().isEmpty())
                 .filter(offer -> !this.offerRepository.existsByOfferUrl(offer.getOfferUrl()))
                 .toList()
-                .stream()
-                .map(offerToSave -> this.offerRepository.save(offerToSave))
-                .toList()
+                //.stream()
+               // .map(offerToSave -> this.offerRepository.save(offerToSave))
+                //.toList()
                 .stream()
                 .map(offerSaved -> OfferMapper.mapFromOfferToOfferResponseDto(offerSaved))
                 .toList();
