@@ -78,10 +78,11 @@ public class TypicalScenarioUserWantToSeeOffersIntegrationTest
             .contentType(MediaType.APPLICATION_JSON));
     //then
     performGetOffersNotExistingId.andExpect(status().isNotFound())
-            .andExpect(content().json("""
+            .andExpect(content().json(
+                    """
                     {
-                    "message": "Offer not found: notExistingId",
-                    "status": "NOT_FOUND"
+                    "message": "Offer not found: 9999",
+                    "httpStatus": "NOT_FOUND"
                     }
                     """.trim()));
   }
