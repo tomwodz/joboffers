@@ -25,6 +25,7 @@
         <testcontainers.version>1.19.0</testcontainers.version>
         <wiremock-jre8.version>2.35.0</wiremock-jre8.version>
         <awaitility.version>4.2.0</awaitility.version>
+        <swagger.version>2.0.2</swagger.version>
     </properties>
 
     <dependencies>
@@ -109,6 +110,11 @@
             <artifactId>awaitility</artifactId>
             <version>${awaitility.version}</version>
             <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.springdoc</groupId>
+            <artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
+            <version>${swagger.version}</version>
         </dependency>
     </dependencies>
 
