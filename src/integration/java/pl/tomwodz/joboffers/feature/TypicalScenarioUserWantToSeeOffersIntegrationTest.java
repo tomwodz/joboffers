@@ -13,11 +13,14 @@ import pl.tomwodz.joboffers.domain.clientoffer.ClientOfferQuery;
 import pl.tomwodz.joboffers.domain.clientoffer.dto.JobOfferResponse;
 import pl.tomwodz.joboffers.domain.offer.dto.OfferResponseDto;
 import pl.tomwodz.joboffers.infrastructure.offer.HttpOffersScheduler;
+
+import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -32,13 +35,13 @@ public class TypicalScenarioUserWantToSeeOffersIntegrationTest
   HttpOffersScheduler httpOffersScheduler;
 
   @Test
-  public void ShouldBeReturnEmptyResponseWhenNotConnectedToExternalOrNotNewOffers() throws Exception {
+  public void UserShouldBe() throws Exception {
     //step 1: there are no offers in external HTTP server
     //given
     wireMockServer.stubFor(WireMock.get("/offers")
             .willReturn(WireMock.aResponse()
                     .withStatus(HttpStatus.OK.value())
-                    .withHeader("Content-Type", "application/json")
+                    .withHeader("Content-Type", "application/json;charset=UTF-8")
                     .withBody(bodyWithZeroOffersJson())));
 
     //when
@@ -85,6 +88,57 @@ public class TypicalScenarioUserWantToSeeOffersIntegrationTest
                     "httpStatus": "NOT_FOUND"
                     }
                     """.trim()));
+
+
+    //step 16: user made POST /offers with header “Authorization: Bearer AAAA.BBBB.CCC” and offer as body and system returned CREATED(201) with saved offer
+    //given
+    String postUrl = "/offers";
+
+    //when
+    ResultActions performPostOffer = mockMvc.perform(post(postUrl).
+            content("""
+                    {
+                    "companyName": "Java (CMS) Developer",
+                    "position": "Efigence SA",
+                    "salary": "16 000 - 18 000 PLN",
+                    "offerUrl": "https://nofluffjobs.com/pl/job/java-cms-developer-efigence-warszawa-b4qs8loh"
+                   }
+                       """)
+            .contentType(MediaType.APPLICATION_JSON_VALUE + ";charset=UTF-8")
+    );
+
+    //then
+    String createdOfferResponse = performPostOffer.andExpect(status().isCreated())
+            .andReturn()
+            .getResponse()
+            .getContentAsString();
+
+    OfferResponseDto parsedCreatedOfferResponse = objectMapper.readValue(createdOfferResponse, new TypeReference<>() {});
+    String id = parsedCreatedOfferResponse.id();
+    assertAll(
+            () ->  assertThat(id).isNotNull(),
+            () -> assertThat(parsedCreatedOfferResponse.companyName()).isEqualTo("Java (CMS) Developer"),
+            () -> assertThat(parsedCreatedOfferResponse.position()).isEqualTo("Efigence SA"),
+            () -> assertThat(parsedCreatedOfferResponse.salary()).isEqualTo("16 000 - 18 000 PLN"),
+            () -> assertThat(parsedCreatedOfferResponse.offerUrl()).isEqualTo("https://nofluffjobs.com/pl/job/java-cms-developer-efigence-warszawa-b4qs8loh")
+    );
+
+    //step 17: user made GET /offers with header “Authorization: Bearer AAAA.BBBB.CCC” and system returned OK(200) with 5 offers (1 offer)
+    //given
+    String getUrl = "/offers";
+    //when
+    ResultActions performGetOneOffers = mockMvc.perform(get(getUrl)
+            .contentType(MediaType.APPLICATION_JSON_VALUE));
+
+    //then
+    String oneOffersResponse = performGetOneOffers.andExpect(status().isOk())
+            .andReturn()
+            .getResponse()
+            .getContentAsString();
+    List<OfferResponseDto> parsedOneOffersResponse =objectMapper.readValue(oneOffersResponse,new TypeReference<>() {});
+    assertThat(parsedOneOffersResponse).hasSize(1);
+
+
   }
 
   @Test
@@ -94,7 +148,7 @@ public class TypicalScenarioUserWantToSeeOffersIntegrationTest
     wireMockServer.stubFor(WireMock.get("/offers")
             .willReturn(WireMock.aResponse()
                     .withStatus(HttpStatus.OK.value())
-                    .withHeader("Content-Type", "application/json")
+                    .withHeader("Content-Type", "application/json;charset=UTF-8")
                     .withBody(bodyWithThreeOffersJson())));
 
     //when
@@ -118,5 +172,8 @@ public class TypicalScenarioUserWantToSeeOffersIntegrationTest
   //step 13: there are 2 new offers in external HTTP server
   //step 14: scheduler ran 3rd time and made GET to external server and system added 2 new offers with ids: 3000 and 4000 to database
   //step 15: user made GET /offers with header “Authorization: Bearer AAAA.BBBB.CCC” and system returned OK(200) with 4 offers with ids: 1000,2000, 3000 and 4000
+
+
+
 
 }
