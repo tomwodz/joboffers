@@ -1,14 +1,32 @@
 package pl.tomwodz.joboffers.controller.error;
 
+import com.github.tomakehurst.wiremock.junit5.WireMockExtension;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.RegisterExtension;
 import org.springframework.http.MediaType;
+import org.springframework.test.context.DynamicPropertyRegistry;
+import org.springframework.test.context.DynamicPropertySource;
 import org.springframework.test.web.servlet.ResultActions;
+import org.testcontainers.containers.MongoDBContainer;
+import org.testcontainers.junit.jupiter.Container;
+import org.testcontainers.utility.DockerImageName;
 import pl.tomwodz.joboffers.BaseIntegrationTest;
 
+import static com.github.tomakehurst.wiremock.core.WireMockConfiguration.wireMockConfig;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 public class OfferDuplicateErrorIntegrationTest extends BaseIntegrationTest {
+
+    @Container
+    public static  final MongoDBContainer mongoDBContainer = new MongoDBContainer(DockerImageName.parse("mongo:4.0.1"));
+
+    @DynamicPropertySource
+    public static  void propertyOverride(DynamicPropertyRegistry registry){
+        registry.add("spring.data.mongodb.uri", mongoDBContainer::getReplicaSetUrl);
+        registry.add("job-offers.client-offer.http.client.config.uri", () -> WIRE_MOCK_HOST);
+        registry.add("job-offers.client-offer.http.client.config.port", () -> wireMockServer.getPort());
+    }
 
     @Test
     public void ShouldReturnConflict409WhenAddedOfferWithUrlExists() throws Exception {
