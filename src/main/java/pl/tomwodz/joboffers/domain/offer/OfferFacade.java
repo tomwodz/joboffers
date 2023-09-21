@@ -30,9 +30,6 @@ public class OfferFacade {
     }
 
     public OfferResponseDto saveOffer(OfferRequestDto offerRequestDto) {
-        if(this.offerRepository.existsByOfferUrl(offerRequestDto.offerUrl())){
-            throw new OfferAlreadyExistException(MessageResponse.OFFER_ALREADY_EXISTS + offerRequestDto.offerUrl());
-        }
         Offer offerToSave = offerFactory.mapFromOfferRequestDtoToOffer(offerRequestDto);
         Offer offerSaved = offerRepository.save(offerToSave);
         return OfferMapper.mapFromOfferToOfferResponseDto(offerSaved);
@@ -41,15 +38,17 @@ public class OfferFacade {
     public List<OfferResponseDto> fetchAllOffersAndSaveAllIfNotExists() {
         List<JobOfferResponse> jobOffersResponse = this.clientOfferQuery.fetchOffers();
         List<Offer> offers = this.offerFactory.mapFromJobOfferResponseToOffers(jobOffersResponse);
+        List<Offer> offersToSave = filterNotExistsByOfferUrl(offers);
+        this.offerRepository.saveAll(offersToSave);
+        return offersToSave.stream()
+                .map(offerSaved -> OfferMapper.mapFromOfferToOfferResponseDto(offerSaved))
+                .toList();
+    }
+
+    private List<Offer> filterNotExistsByOfferUrl(List<Offer> offers) {
         return offers.stream()
                 .filter(offer -> !offer.getOfferUrl().isEmpty())
                 .filter(offer -> !this.offerRepository.existsByOfferUrl(offer.getOfferUrl()))
-                .toList()
-                .stream()
-                .map(offerToSave -> this.offerRepository.save(offerToSave))
-                .toList()
-                .stream()
-                .map(offerSaved -> OfferMapper.mapFromOfferToOfferResponseDto(offerSaved))
                 .toList();
     }
 

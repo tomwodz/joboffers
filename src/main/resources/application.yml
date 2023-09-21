@@ -2,6 +2,7 @@ spring:
   data:
     mongodb:
       uri: mongodb://tomwodz:tomwodz@localhost:27017/mongo_joboffers
+      auto-index-creation: true
 
 
 job-offers:

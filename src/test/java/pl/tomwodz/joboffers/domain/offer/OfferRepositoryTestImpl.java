@@ -1,5 +1,6 @@
 package pl.tomwodz.joboffers.domain.offer;
 
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -33,16 +34,6 @@ public class OfferRepositoryTestImpl implements OfferRepository {
                 .toList();
     }
 
-    @Override
-    public Offer save(Offer offer) {
-        String generateId = UUID.randomUUID().toString();
-        this.inMemoryDatabase.put(generateId, offer);
-        return new Offer(generateId,
-                inMemoryDatabase.get(generateId).getCompanyName(),
-                inMemoryDatabase.get(generateId).getPosition(),
-                inMemoryDatabase.get(generateId).getSalary(),
-                inMemoryDatabase.get(generateId).getOfferUrl());
-    }
 
     @Override
     public boolean existsByOfferUrl(String url) {
@@ -55,6 +46,23 @@ public class OfferRepositoryTestImpl implements OfferRepository {
     @Override
     public <S extends Offer> S insert(S entity) {
         return null;
+    }
+
+    @Override
+    public <S extends Offer> S save(S entity) {
+        if (inMemoryDatabase.values().stream().anyMatch(offer -> offer.getOfferUrl().equals(entity.getOfferUrl()))) {
+            throw new DuplicateKeyException(String.format("Offer with offerUrl [%s] already exists", entity.getOfferUrl()));
+        }
+        UUID id = UUID.randomUUID();
+        Offer offer = new Offer(
+                id.toString(),
+                entity.getCompanyName(),
+                entity.getPosition(),
+                entity.getSalary(),
+                entity.getOfferUrl()
+        );
+        inMemoryDatabase.put(id.toString(), offer);
+        return (S) offer;
     }
 
     @Override

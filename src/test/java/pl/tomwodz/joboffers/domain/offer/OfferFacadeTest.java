@@ -1,6 +1,7 @@
 package pl.tomwodz.joboffers.domain.offer;
 
 import org.junit.jupiter.api.Test;
+import org.springframework.dao.DuplicateKeyException;
 import pl.tomwodz.joboffers.domain.clientoffer.ClientOfferQuery;
 import pl.tomwodz.joboffers.domain.clientoffer.dto.JobOfferResponse;
 import pl.tomwodz.joboffers.domain.offer.dto.OfferRequestDto;
@@ -88,7 +89,7 @@ class OfferFacadeTest {
                 .build();
 
         //then
-        assertThrows(OfferAlreadyExistException.class, () -> this.offerFacade.saveOffer(offerRequestDtoDuplicateUrlSaved));
+        assertThrows(DuplicateKeyException.class, () -> this.offerFacade.saveOffer(offerRequestDtoDuplicateUrlSaved));
 
     }
 
