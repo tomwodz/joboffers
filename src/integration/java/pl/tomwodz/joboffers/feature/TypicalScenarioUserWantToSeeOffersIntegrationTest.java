@@ -18,6 +18,7 @@ import pl.tomwodz.joboffers.domain.clientoffer.ClientOfferQuery;
 import pl.tomwodz.joboffers.domain.clientoffer.dto.JobOfferResponse;
 import pl.tomwodz.joboffers.domain.loginandregister.dto.RegistrationResultDto;
 import pl.tomwodz.joboffers.domain.offer.dto.OfferResponseDto;
+
 import pl.tomwodz.joboffers.infrastructure.loginandregister.controller.dto.JwtResponseDto;
 import pl.tomwodz.joboffers.infrastructure.offer.scheduler.HttpOffersScheduler;
 

@@ -4,8 +4,10 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.data.mongodb.repository.config.EnableMongoRepositories;
+
 import pl.tomwodz.joboffers.infrastructure.clientoffer.ClientOfferRestTemplateConfigurationProperties;
 import pl.tomwodz.joboffers.infrastructure.security.jwt.JwtConfigurationProperties;
+
 
 @SpringBootApplication
 @EnableConfigurationProperties({ClientOfferRestTemplateConfigurationProperties.class,

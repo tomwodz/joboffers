@@ -1,4 +1,4 @@
-package pl.tomwodz.joboffers.infrastructure.clientoffer;
+package pl.tomwodz.joboffers.infrastructure.clientoffer.http;
 
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.context.annotation.Bean;
@@ -9,7 +9,7 @@ import pl.tomwodz.joboffers.domain.clientoffer.ClientOfferQuery;
 import java.time.Duration;
 
 @Configuration
-class ClientOfferConfiguration {
+public class ClientOfferConfiguration {
 
     @Bean
     public RestTemplateResponseErrorHandler restTemplateResponseErrorHandler() {

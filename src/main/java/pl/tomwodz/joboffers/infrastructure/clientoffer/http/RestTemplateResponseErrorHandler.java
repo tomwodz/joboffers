@@ -1,4 +1,4 @@
-package pl.tomwodz.joboffers.infrastructure.clientoffer;
+package pl.tomwodz.joboffers.infrastructure.clientoffer.http;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.client.ClientHttpResponse;
@@ -10,7 +10,7 @@ import java.io.IOException;
 import static org.springframework.http.HttpStatus.Series.CLIENT_ERROR;
 import static org.springframework.http.HttpStatus.Series.SERVER_ERROR;
 
-class RestTemplateResponseErrorHandler extends DefaultResponseErrorHandler {
+public class RestTemplateResponseErrorHandler extends DefaultResponseErrorHandler {
 
     @Override
     public void handleError(ClientHttpResponse httpResponse) throws IOException {
