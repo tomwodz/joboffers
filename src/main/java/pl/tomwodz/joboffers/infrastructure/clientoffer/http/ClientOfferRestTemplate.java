@@ -1,14 +1,12 @@
-package pl.tomwodz.joboffers.infrastructure.clientoffer;
+package pl.tomwodz.joboffers.infrastructure.clientoffer.http;
 
 import lombok.AllArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.core.ParameterizedTypeReference;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
 import org.springframework.web.client.ResourceAccessException;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.util.UriComponentsBuilder;
 import pl.tomwodz.joboffers.domain.clientoffer.ClientOfferQuery;
 import pl.tomwodz.joboffers.domain.clientoffer.dto.JobOfferResponse;
@@ -18,7 +16,7 @@ import java.util.List;
 
 @Log4j2
 @AllArgsConstructor
-class ClientOfferRestTemplate implements ClientOfferQuery {
+public class ClientOfferRestTemplate implements ClientOfferQuery {
 
     private final RestTemplate restTemplate;
     private final String uri;
@@ -41,9 +39,9 @@ class ClientOfferRestTemplate implements ClientOfferQuery {
             response.getBody();
             return verificationBodyResponse(response.getBody());
         }
-        catch (ResourceAccessException e) {
+        catch (ResourceAccessException | IllegalArgumentException e) {
             log.error("Error connecting to outside client " + e.getMessage());
-            return Collections.emptyList();
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
@@ -57,7 +55,7 @@ class ClientOfferRestTemplate implements ClientOfferQuery {
             return listBodyResponse;
         }
         log.info("List job offers was null.");
-        return Collections.emptyList();
+        throw new ResponseStatusException(HttpStatus.NO_CONTENT);
     }
 
 }

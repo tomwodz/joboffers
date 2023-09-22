@@ -1,4 +1,4 @@
-package pl.tomwodz.joboffers.infrastructure.offer;
+package pl.tomwodz.joboffers.infrastructure.offer.scheduler;
 
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Configuration;
