@@ -1,5 +1,6 @@
 package pl.tomwodz.joboffers.infrastructure.offer.controller;
 
+
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;

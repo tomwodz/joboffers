@@ -1,4 +1,4 @@
-package pl.tomwodz.joboffers.infrastructure.offer;
+package pl.tomwodz.joboffers.infrastructure.offer.scheduler;
 
 import lombok.AllArgsConstructor;
 import lombok.extern.log4j.Log4j2;
