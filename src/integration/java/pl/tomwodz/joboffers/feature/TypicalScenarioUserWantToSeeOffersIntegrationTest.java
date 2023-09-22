@@ -17,10 +17,9 @@ import pl.tomwodz.joboffers.BaseIntegrationTest;
 import pl.tomwodz.joboffers.domain.clientoffer.ClientOfferQuery;
 import pl.tomwodz.joboffers.domain.clientoffer.dto.JobOfferResponse;
 import pl.tomwodz.joboffers.domain.offer.dto.OfferResponseDto;
-import pl.tomwodz.joboffers.infrastructure.offer.HttpOffersScheduler;
+import pl.tomwodz.joboffers.infrastructure.offer.scheduler.HttpOffersScheduler;
 
 import java.util.List;
-import java.util.OptionalDouble;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;

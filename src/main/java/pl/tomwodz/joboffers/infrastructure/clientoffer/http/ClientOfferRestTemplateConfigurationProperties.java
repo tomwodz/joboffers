@@ -1,4 +1,4 @@
-package pl.tomwodz.joboffers.infrastructure.clientoffer;
+package pl.tomwodz.joboffers.infrastructure.clientoffer.http;
 
 import lombok.Builder;
 import org.springframework.boot.context.properties.ConfigurationProperties;
