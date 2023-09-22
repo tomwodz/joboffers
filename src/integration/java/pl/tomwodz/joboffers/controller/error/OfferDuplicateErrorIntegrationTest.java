@@ -4,6 +4,7 @@ import com.github.tomakehurst.wiremock.junit5.WireMockExtension;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.RegisterExtension;
 import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.DynamicPropertyRegistry;
 import org.springframework.test.context.DynamicPropertySource;
 import org.springframework.test.web.servlet.ResultActions;
@@ -29,6 +30,7 @@ public class OfferDuplicateErrorIntegrationTest extends BaseIntegrationTest {
     }
 
     @Test
+    @WithMockUser
     public void ShouldReturnConflict409WhenAddedOfferWithUrlExists() throws Exception {
 
         //step 1: saved offer
