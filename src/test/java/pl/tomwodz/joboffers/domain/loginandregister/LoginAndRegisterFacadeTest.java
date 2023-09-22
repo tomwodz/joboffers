@@ -1,12 +1,15 @@
 package pl.tomwodz.joboffers.domain.loginandregister;
 
 import org.junit.jupiter.api.Test;
+import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import pl.tomwodz.joboffers.domain.loginandregister.dto.RegistrationResultDto;
 import pl.tomwodz.joboffers.domain.loginandregister.dto.UserDto;
 import pl.tomwodz.joboffers.domain.loginandregister.dto.UserRegisterRequestDto;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class LoginAndRegisterFacadeTest {
 
@@ -73,7 +76,7 @@ class LoginAndRegisterFacadeTest {
         //given
         //when
         //then
-        assertThrows(UserNotFoundException.class, () -> loginAndRegisterFacade.findByUsername(userRegisterRequestDto.username()));
+        assertThrows(BadCredentialsException.class, () -> loginAndRegisterFacade.findByUsername(userRegisterRequestDto.username()));
 
     }
 

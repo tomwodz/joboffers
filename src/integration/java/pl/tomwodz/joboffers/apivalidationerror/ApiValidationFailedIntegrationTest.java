@@ -3,6 +3,7 @@ package pl.tomwodz.joboffers.apivalidationerror;
 import com.fasterxml.jackson.core.type.TypeReference;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.ResultActions;
 import pl.tomwodz.joboffers.BaseIntegrationTest;
@@ -15,6 +16,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 public class ApiValidationFailedIntegrationTest extends BaseIntegrationTest {
 
     @Test
+    @WithMockUser
     public void ShouldReturn400BadRequestAndValidationMessageWhenOfferRequestDtoToSaveHasEmptyAndNull() throws Exception {
 
         //given
