@@ -1,6 +1,7 @@
 package pl.tomwodz.joboffers.domain.offer;
 
 import lombok.AllArgsConstructor;
+import org.springframework.cache.annotation.Cacheable;
 import pl.tomwodz.joboffers.domain.clientoffer.ClientOfferQuery;
 import pl.tomwodz.joboffers.domain.clientoffer.dto.JobOfferResponse;
 import pl.tomwodz.joboffers.domain.offer.dto.OfferRequestDto;
@@ -22,6 +23,7 @@ public class OfferFacade {
                 .orElseThrow(() -> new OfferNotFoundException(OFFER_NOT_FOUND.info + id));
     }
 
+    @Cacheable("jobOffers")
     public List<OfferResponseDto> findAllOffers() {
         return this.offerRepository.findAll()
                 .stream()

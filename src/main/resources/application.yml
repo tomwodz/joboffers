@@ -3,7 +3,13 @@ spring:
     mongodb:
       uri: mongodb://tomwodz:tomwodz@localhost:27017/mongo_joboffers
       auto-index-creation: true
-
+    redis:
+      host: localhost
+      port: 63792
+  cache:
+    type: redis
+    redis:
+      time-to-live: PT60M
 
 job-offers:
   client-offer:
