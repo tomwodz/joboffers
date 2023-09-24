@@ -14,16 +14,13 @@ import org.testcontainers.containers.MongoDBContainer;
 import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.utility.DockerImageName;
 import pl.tomwodz.joboffers.BaseIntegrationTest;
+import pl.tomwodz.joboffers.UserLoginAndRegister;
 import pl.tomwodz.joboffers.domain.clientoffer.ClientOfferQuery;
 import pl.tomwodz.joboffers.domain.clientoffer.dto.JobOfferResponse;
-import pl.tomwodz.joboffers.domain.loginandregister.dto.RegistrationResultDto;
 import pl.tomwodz.joboffers.domain.offer.dto.OfferResponseDto;
-
-import pl.tomwodz.joboffers.infrastructure.loginandregister.controller.dto.JwtResponseDto;
 import pl.tomwodz.joboffers.infrastructure.offer.scheduler.HttpOffersScheduler;
 
 import java.util.List;
-import java.util.regex.Pattern;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
@@ -51,6 +48,10 @@ public class TypicalScenarioUserWantToSeeOffersIntegrationTest
 
   @Autowired
   HttpOffersScheduler httpOffersScheduler;
+
+  @Autowired
+  UserLoginAndRegister userLoginAndRegister;
+
 
   @Test
   public void UserShouldBeAbleUseApplication() throws Exception {
@@ -113,45 +114,12 @@ public class TypicalScenarioUserWantToSeeOffersIntegrationTest
     //step 5: user made POST /register with username=someUser, password=somePassword and system registered user with status OK(200)
     //given
     //when
-    ResultActions registerAction = mockMvc.perform(post("/register")
-            .content("""
-                        {
-                        "username": "someUser",
-                        "password": "somePassword"
-                        }
-                        """.trim())
-            .contentType(MediaType.APPLICATION_JSON_VALUE)
-    );
     //then
-    MvcResult mvcResultStep5 = registerAction.andExpect(status().isCreated()).andReturn();
-    String registerActionResultResponse = mvcResultStep5.getResponse().getContentAsString();RegistrationResultDto registrationResultDto = objectMapper.readValue(registerActionResultResponse, new TypeReference<>() {});
-    assertAll(
-            () -> assertThat(registrationResultDto.username()).isEqualTo("someUser"),
-            () -> assertThat(registrationResultDto.registered()).isTrue(),
-            () -> assertThat(registrationResultDto.id()).isNotNull()
-    );
-
     //step 6: user tried to get JWT token by requesting POST /token with username=someUser, password=somePassword and system returned OK(200) and jwttoken=AAAA.BBBB.CCC
     //given
     //when
-    ResultActions successLoginRequest = mockMvc.perform(post("/token")
-            .content("""
-                        {
-                        "username": "someUser",
-                        "password": "somePassword"
-                        }
-                        """.trim())
-            .contentType(MediaType.APPLICATION_JSON_VALUE)
-    );
     //then
-    MvcResult mvcResultStep6 = successLoginRequest.andExpect(status().isOk()).andReturn();
-    String responseStep6 = mvcResultStep6.getResponse().getContentAsString();
-    JwtResponseDto jwtResponse = objectMapper.readValue(responseStep6, JwtResponseDto.class);
-    String token = jwtResponse.token();
-    assertAll(
-            () -> assertThat(jwtResponse.username()).isEqualTo("someUser"),
-            () -> assertThat(token).matches(Pattern.compile("^([A-Za-z0-9-_=]+\\.)+([A-Za-z0-9-_=])+\\.?$"))
-    );
+    String token = userLoginAndRegister.userRegisterAndLogin();
 
     //step 7: user made GET /offers with header “Authorization: Bearer AAAA.BBBB.CCC” and system returned OK(200) with 0 offers
     //given
@@ -322,7 +290,8 @@ public class TypicalScenarioUserWantToSeeOffersIntegrationTest
     List<OfferResponseDto> parsedOffersResponse =objectMapper.readValue(OffersResponse, new TypeReference<>() {});
     assertThat(parsedOffersResponse).hasSize(5);
 
-
   }
+
+
 
 }
