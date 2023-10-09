@@ -5,7 +5,7 @@ job-offers:
         delay: PT1s
 
 scheduling:
-      enabled: false
+  enable: false
 
 spring:
   cache:

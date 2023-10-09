@@ -290,8 +290,8 @@ public class TypicalScenarioUserWantToSeeOffersIntegrationTest
     List<OfferResponseDto> parsedOffersResponse =objectMapper.readValue(OffersResponse, new TypeReference<>() {});
     assertThat(parsedOffersResponse).hasSize(5);
 
+
+
+
   }
-
-
-
 }

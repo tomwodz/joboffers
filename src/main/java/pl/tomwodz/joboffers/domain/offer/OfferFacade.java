@@ -1,6 +1,7 @@
 package pl.tomwodz.joboffers.domain.offer;
 
 import lombok.AllArgsConstructor;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.cache.annotation.Cacheable;
 import pl.tomwodz.joboffers.domain.clientoffer.ClientOfferQuery;
 import pl.tomwodz.joboffers.domain.clientoffer.dto.JobOfferResponse;
@@ -12,6 +13,7 @@ import java.util.List;
 import static pl.tomwodz.joboffers.domain.offer.MessageResponse.OFFER_NOT_FOUND;
 
 @AllArgsConstructor
+@Log4j2
 public class OfferFacade {
 
     private final OfferRepository offerRepository;
@@ -34,6 +36,7 @@ public class OfferFacade {
     public OfferResponseDto saveOffer(OfferRequestDto offerRequestDto) {
         Offer offerToSave = offerFactory.mapFromOfferRequestDtoToOffer(offerRequestDto);
         Offer offerSaved = offerRepository.save(offerToSave);
+        log.info("added offer" + offerSaved.getOfferUrl());
         return OfferMapper.mapFromOfferToOfferResponseDto(offerSaved);
     }
 

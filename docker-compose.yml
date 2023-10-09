@@ -17,7 +17,7 @@ services:
     image: mongo-express
     restart: always
     ports:
-      - "8081:8081"
+      - "9001:8081"
     environment:
       ME_CONFIG_MONGODB_ADMINUSERNAME: root
       ME_CONFIG_MONGODB_ADMINPASSWORD: example
@@ -27,7 +27,7 @@ services:
   redis:
     image: redis
     ports:
-      - "63792:6379"
+      - "6379:6379"
     restart: always
 
   redis-commander_joboffers:
@@ -36,4 +36,4 @@ services:
     environment:
         - REDIS_HOSTS=local:redis:6379
     ports:
-        - "8082:8081"
+        - "9002:8081"

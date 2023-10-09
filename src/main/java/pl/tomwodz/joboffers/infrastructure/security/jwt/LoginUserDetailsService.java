@@ -13,6 +13,7 @@ import java.util.Collections;
 public class LoginUserDetailsService implements UserDetailsService {
 
     private final LoginAndRegisterFacade loginAndRegisterFacade;
+
     @Override
     public UserDetails loadUserByUsername(String username) throws BadCredentialsException {
         UserDto userDto = loginAndRegisterFacade.findByUsername(username);

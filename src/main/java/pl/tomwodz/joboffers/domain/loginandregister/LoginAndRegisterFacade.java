@@ -2,7 +2,6 @@ package pl.tomwodz.joboffers.domain.loginandregister;
 
 import lombok.AllArgsConstructor;
 import org.springframework.security.authentication.BadCredentialsException;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import pl.tomwodz.joboffers.domain.loginandregister.dto.RegistrationResultDto;
 import pl.tomwodz.joboffers.domain.loginandregister.dto.UserDto;
 import pl.tomwodz.joboffers.domain.loginandregister.dto.UserRegisterRequestDto;
